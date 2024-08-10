@@ -26,6 +26,9 @@ export default function Home() {
                         border = "1px solid black"
                           p={2}
                             spacing={2}
-                        
+
+
+                              
+                              </Satck;
     </Box>;
 }
