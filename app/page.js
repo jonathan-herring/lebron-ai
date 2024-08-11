@@ -38,7 +38,7 @@ export default function Home() {
               const rexr = decoder.decode(value || new Int8Array(), {stream:true})
               setMessages({messages)=>{
                 let lastMessage = messages[messages.length-1]
-                let otherMessages = messages.slice[messages.length-1]
+                let otherMessages = messages.slice[0, messages.length-1]
                 return([
                   ...otherMessages,
                   {
@@ -48,6 +48,9 @@ export default function Home() {
                   ]
                        })
                 return reader.read().then(processText)
+              })
+        })
+}
 
   
   return (
@@ -98,7 +101,7 @@ export default function Home() {
                 value={message}
                 onChange ={(e) => setMesssage(e.target.value)}
                   />
-                  <Button variant = "contained">
+                  <Button variant = onClick={sendMessage}"contained">
       </Stack>
     </Box>
   );
