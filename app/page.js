@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import {useState) from 'react'
 
 export default function Home() {
-  const [messages, setMessages] = useState({
+  const [messages, setMessages] = useState([{
     role: 'assistant',
     content: 'Hi I am Lebron James, how can I assist you today?'
   })
@@ -26,6 +26,27 @@ export default function Home() {
                         border = "1px solid black"
                           p={2}
                             spacing={2}
+                              >
+                              </Stack>
+                              direction="column"
+                                spacing={2}
+                                  flexGrow={1}
+                                    overflow="auto"
+                                      maxHeight="100%"
+                                        >
+                                        {
+                                          messages.map({message, index)=>{
+                                            <Box key ={index} display = 'flex' justifyCotnent ={message.role==='assistant' ? 'flex-start' : 'flex-end'
+                                          }
+                                                       }
+                                                       <Box 
+                                                       bgcolor ={
+                                        message.role == 'assistant' ? 'primary.main' : 'secondary.main'
+                                        }
+                                        color="white"
+                                          borderRadius ={16}
+                                            p={3}
+                                        </Stack>
 
 
                               
