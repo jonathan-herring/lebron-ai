@@ -14,45 +14,58 @@ export default function Home() {
   const [message, setMessage] = useState('');
 
   const sendMessage = async () => {
-    setMessage('');
+    // Update messages and clear the input field
     setMessages((messages) => [
       ...messages,
       { role: "user", content: message },
       { role: 'assistant', content: '' },
     ]);
+    setMessage('');
 
-    const response = await fetch('/api/chat', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify([...messages, { role: 'user', content: message }])
-    });
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let result = '';
-
-    reader.read().then(function processText({ done, value }) {
-      if (done) {
-        return result;
-      }
-
-      const text = decoder.decode(value || new Int8Array(), { stream: true });
-      setMessages((messages) => {
-        let lastMessage = messages[messages.length - 1];
-        let otherMessages = messages.slice(0, messages.length - 1);
-        return [
-          ...otherMessages,
-          {
-            ...lastMessage,
-            content: lastMessage.content + text,
-          },
-        ];
+    try {
+      const response = await fetch('/api/chat', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([...messages, { role: 'user', content: message }])
       });
 
-      return reader.read().then(processText);
-    });
+      if (!response.ok) {
+        console.error('Failed to fetch');
+        return;
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let result = '';
+
+      const processText = async ({ done, value }) => {
+        if (done) {
+          return;
+        }
+
+        const text = decoder.decode(value || new Uint8Array(), { stream: true });
+        setMessages((messages) => {
+          let lastMessage = messages[messages.length - 1];
+          let otherMessages = messages.slice(0, messages.length - 1);
+          return [
+            ...otherMessages,
+            {
+              ...lastMessage,
+              content: lastMessage.content + text,
+            },
+          ];
+        });
+
+        return reader.read().then(processText);
+      };
+
+      await reader.read().then(processText);
+
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
   return (
