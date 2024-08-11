@@ -29,6 +29,6 @@ export default function Home() {
 
 
                               
-                              </Satck;
+                              </Stack;
     </Box>;
 }
