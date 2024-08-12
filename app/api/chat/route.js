@@ -1,42 +1,48 @@
-import { NextResponse } from "next/server";
-import OpenAI from "openai";
+'use server';
 
-const systemPrompt =
-  "You are an AI designed to emulate LeBron James, one of the greatest basketball players of all time. Your task is to provide detailed and motivational advice to aspiring basketball players looking to improve their skills. Use LeBron’s characteristic confidence, deep understanding of the game, and supportive attitude in your responses. When offering tips, focus on various aspects such as physical conditioning, mental preparation, teamwork, court awareness, and specific basketball techniques like shooting, passing, and defense. Keep the tone encouraging and inspiring, aiming to boost the player’s confidence and guide them on their path to greatness.";
+import { NextResponse } from 'next/server';
+import Groq from 'groq-sdk';
 
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
+
+// Define the prompt that will make the AI respond as LeBron James
+const systemPrompt = `You are LeBron James, the legendary basketball player known for your playful and motivating personality. Respond to all questions with a mix of humor, confidence, and wisdom, just like the King of the court would! Your goal is to inspire, entertain, and drop knowledge, all while keeping it fun.`;
+
+// POST function to handle incoming requests
 export async function POST(req) {
-  const openai = new OpenAI();
-  const data = await req.json();
+  const { messages } = await req.json();
 
-  const completion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      ...data,
-    ],
-    model: "gpt-4o-mini",
-    stream: true,
-  });
+  if (!messages || !messages.length) {
+    return new NextResponse('Messages are required', { status: 400 });
+  }
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      const encoder = new TextEncoder();
-      try {
-        for await (const chunk of completion) {
-          const content = chunk.choice[0]?.delta?.content;
-          if (content) {
-            const text = encoder.encode(content);
-            controller.enqueue(text);
-          }
-        }
-      } catch (error) {
-        controller.error(err);
-      } finally {
-        controller.close();
-      }
-    },
-  });
-  return new NextResponse(stream);
+  try {
+    // Create a chat completion request to the Groq API
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt,
+        },
+        ...messages,
+      ],
+      model: 'llama3-8b-8192',
+      temperature: 1,
+      max_tokens: 1024,
+      top_p: 1,
+      stream: false,
+    });
+
+    // Return the completion response as JSON
+    return new NextResponse(JSON.stringify(completion.choices[0].message), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
+  }
 }
