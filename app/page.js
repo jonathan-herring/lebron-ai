@@ -1,5 +1,5 @@
 'use client';
-import Image from "next/image";
+
 import { Box, Stack, TextField, Button } from "@mui/material";
 import { useState } from 'react';
 
@@ -7,14 +7,13 @@ export default function Home() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'Hi I am Lebron James, how can I assist you today?'
+      content: 'Yo, it’s LeBron! How can I help you today? Let’s talk hoops, life, or whatever you got!',
     }
   ]);
 
   const [message, setMessage] = useState('');
 
   const sendMessage = async () => {
-    // Update messages and clear the input field
     setMessages((messages) => [
       ...messages,
       { role: "user", content: message },
@@ -26,45 +25,30 @@ export default function Home() {
       const response = await fetch('/api/chat', {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify([...messages, { role: 'user', content: message }])
+        body: JSON.stringify({ messages }),
       });
 
       if (!response.ok) {
-        console.error('Failed to fetch');
-        return;
+        throw new Error('Failed to fetch');
       }
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let result = '';
+      const result = await response.json();
 
-      const processText = async ({ done, value }) => {
-        if (done) {
-          return;
-        }
-
-        const text = decoder.decode(value || new Uint8Array(), { stream: true });
-        setMessages((messages) => {
-          let lastMessage = messages[messages.length - 1];
-          let otherMessages = messages.slice(0, messages.length - 1);
-          return [
-            ...otherMessages,
-            {
-              ...lastMessage,
-              content: lastMessage.content + text,
-            },
-          ];
-        });
-
-        return reader.read().then(processText);
-      };
-
-      await reader.read().then(processText);
-
+      setMessages((messages) => {
+        let lastMessage = messages[messages.length - 1];
+        let otherMessages = messages.slice(0, messages.length - 1);
+        return [
+          ...otherMessages,
+          {
+            ...lastMessage,
+            content: lastMessage.content + result.content,
+          },
+        ];
+      });
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error:', error);
     }
   };
 
