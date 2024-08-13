@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Head from 'next/head'; // Import Head from next/head
 import { Box, Stack, TextField, Button, createTheme, ThemeProvider } from '@mui/material';
 import { deepPurple } from '@mui/material/colors';
 
@@ -77,10 +76,6 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={LakersTheme}>
-      <Head>
-        <title>Chat with LeBron AI: Basketball Tips & Fun Conversations</title>
-        <meta name="description" content="Experience the ultimate basketball chat with LeBron AI! Get tips from the King himself, enjoy motivational advice, and dive into fun conversations about hoops and life." />
-      </Head>
       <Box
         width="calc(100vw - 16px)"
         height="calc(100vh - 16px)"
