@@ -10,17 +10,18 @@ import {
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const LakersTheme = createTheme({
   palette: {
     primary: {
-      main: deepPurple[500], // Custom primary color
+      main: deepPurple[500],
       light: "#63a4ff",
       dark: "#004ba0",
       contrastText: "#fff",
     },
     secondary: {
-      main: "yellow", // Custom secondary color
+      main: "yellow",
       light: "#d05ce3",
       dark: "#6a0080",
       contrastText: "#fff",
@@ -84,6 +85,7 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={LakersTheme}>
+      <Sidebar messages={messages} />
       <Box
         width="calc(100vw - 16px)"
         height="calc(100vh - 16px)"
