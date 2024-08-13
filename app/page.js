@@ -46,6 +46,8 @@ export default function Home() {
   const sendMessage = async () => {
     if (!message.trim()) return; // Prevent sending empty messages
 
+    const updatedMessages = [...messages, { role: "user", content: message }];
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { role: "user", content: message },
@@ -59,7 +61,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages: [...messages, { role: "user", content: message }] }),
+        body: JSON.stringify({ messages: updatedMessages }),
       });
 
       if (!response.ok) {
