@@ -1,33 +1,27 @@
-"use client";
+'use client';
 
-import {
-  Box,
-  Stack,
-  TextField,
-  Button,
-  createTheme,
-  ThemeProvider,
-} from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
-import { useState } from "react";
+import { useState } from 'react';
+import Head from 'next/head'; // Import Head from next/head
+import { Box, Stack, TextField, Button, createTheme, ThemeProvider } from '@mui/material';
+import { deepPurple } from '@mui/material/colors';
 
 const LakersTheme = createTheme({
   palette: {
     primary: {
       main: deepPurple[500],
-      light: "#63a4ff",
-      dark: "#004ba0",
-      contrastText: "#fff",
+      light: '#63a4ff',
+      dark: '#004ba0',
+      contrastText: '#fff',
     },
     secondary: {
-      main: "yellow",
-      light: "#d05ce3",
-      dark: "#6a0080",
-      contrastText: "#fff",
+      main: 'yellow',
+      light: '#d05ce3',
+      dark: '#6a0080',
+      contrastText: '#fff',
     },
     gradients: {
-      primary: "linear-gradient(45deg, #9575cd 30%, #dce775 90%)",
-      secondary: "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+      primary: 'linear-gradient(45deg, #9575cd 30%, #dce775 90%)',
+      secondary: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
     },
   },
 });
@@ -35,52 +29,58 @@ const LakersTheme = createTheme({
 export default function Home() {
   const [messages, setMessages] = useState([
     {
-      role: "assistant",
-      content:
-        "Yo, it’s LeBron! How can I help you today? Let’s talk hoops, life, or whatever you got!",
+      role: 'assistant',
+      content: 'Yo, it’s LeBron! How can I help you today? Let’s talk hoops, life, or whatever you got!',
     },
   ]);
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   const sendMessage = async () => {
-    if (!message.trim()) return; // Prevent sending empty messages
-
-    const updatedMessages = [...messages, { role: "user", content: message }];
-
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { role: "user", content: message },
-      { role: "assistant", content: "" },
+    setMessages((messages) => [
+      ...messages,
+      { role: 'user', content: message },
+      { role: 'assistant', content: '' },
     ]);
-    setMessage("");
+    setMessage('');
 
     try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
+      const response = await fetch('/api/chat', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({ messages }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch");
+        throw new Error('Failed to fetch');
       }
 
       const result = await response.json();
 
-      setMessages((prevMessages) => [
-        ...prevMessages.slice(0, -1), // Remove the placeholder for the assistant
-        { role: "assistant", content: result.content },
-      ]);
+      setMessages((messages) => {
+        let lastMessage = messages[messages.length - 1];
+        let otherMessages = messages.slice(0, messages.length - 1);
+        return [
+          ...otherMessages,
+          {
+            ...lastMessage,
+            content: lastMessage.content + result.content,
+          },
+        ];
+      });
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
   return (
     <ThemeProvider theme={LakersTheme}>
+      <Head>
+        <title>Chat with LeBron AI: Basketball Tips & Fun Conversations</title>
+        <meta name="description" content="Experience the ultimate basketball chat with LeBron AI! Get tips from the King himself, enjoy motivational advice, and dive into fun conversations about hoops and life." />
+      </Head>
       <Box
         width="calc(100vw - 16px)"
         height="calc(100vh - 16px)"
@@ -96,11 +96,12 @@ export default function Home() {
               height: 633,
               width: 400,
               marginRight: 2,
-              backgroundSize: "cover",
-              backgroundImage: "url(/lebron-poster-dunk.png)",
+              backgroundSize: '400px',
+              backgroundRepeat: 'no-repeat',
+              backgroundImage: 'url(lebron-poster-dunk.png)',
               display: {
-                sm: "none",
-                md: "flex",
+                sm: 'none',
+                md: 'flex',
               },
             }}
             display="flex"
@@ -121,25 +122,25 @@ export default function Home() {
               overflow="auto"
               maxHeight="100%"
             >
-              {messages.map((msg, index) => (
+              {messages.map((message, index) => (
                 <Box
                   key={index}
                   display="flex"
                   justifyContent={
-                    msg.role === "assistant" ? "flex-start" : "flex-end"
+                    message.role === 'assistant' ? 'flex-start' : 'flex-end'
                   }
                 >
                   <Box
                     bgcolor={
-                      msg.role === "assistant"
-                        ? "primary.main"
-                        : "secondary.main"
+                      message.role === 'assistant'
+                        ? 'primary.main'
+                        : 'secondary.main'
                     }
-                    color={msg.role === "assistant" ? "white" : "black"}
+                    color={message.role === 'assistant' ? 'white' : 'black'}
                     borderRadius={16}
                     p={3}
                   >
-                    {msg.content}
+                    {message.content}
                   </Box>
                 </Box>
               ))}
@@ -155,10 +156,10 @@ export default function Home() {
                 variant="contained"
                 onClick={sendMessage}
                 sx={{
-                  backgroundColor: "primary.main",
-                  "&:hover": {
-                    backgroundColor: "secondary.main",
-                    color: "black",
+                  backgroundColor: 'primary.main',
+                  '&:hover': {
+                    backgroundColor: 'secondary.main',
+                    color: 'black',
                   },
                 }}
               >
