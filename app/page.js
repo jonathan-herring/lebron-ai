@@ -14,13 +14,13 @@ import { useState } from "react";
 const LakersTheme = createTheme({
   palette: {
     primary: {
-      main: deepPurple[500], // Custom primary color
+      main: deepPurple[500],
       light: "#63a4ff",
       dark: "#004ba0",
       contrastText: "#fff",
     },
     secondary: {
-      main: "yellow", // Custom secondary color
+      main: "yellow",
       light: "#d05ce3",
       dark: "#6a0080",
       contrastText: "#fff",
@@ -44,8 +44,10 @@ export default function Home() {
   const [message, setMessage] = useState("");
 
   const sendMessage = async () => {
-    setMessages((messages) => [
-      ...messages,
+    if (!message.trim()) return; // Prevent sending empty messages
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
       { role: "user", content: message },
       { role: "assistant", content: "" },
     ]);
@@ -57,7 +59,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages: [...messages, { role: "user", content: message }] }),
       });
 
       if (!response.ok) {
@@ -66,17 +68,10 @@ export default function Home() {
 
       const result = await response.json();
 
-      setMessages((messages) => {
-        let lastMessage = messages[messages.length - 1];
-        let otherMessages = messages.slice(0, messages.length - 1);
-        return [
-          ...otherMessages,
-          {
-            ...lastMessage,
-            content: lastMessage.content + result.content,
-          },
-        ];
-      });
+      setMessages((prevMessages) => [
+        ...prevMessages.slice(0, -1), // Remove the placeholder for the assistant
+        { role: "assistant", content: result.content },
+      ]);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -99,9 +94,8 @@ export default function Home() {
               height: 633,
               width: 400,
               marginRight: 2,
-              backgroundSize: "400px",
-              backgroundRepeat: "no-repeat",
-              backgroundImage: "url(lebron-poster-dunk.png)",
+              backgroundSize: "cover",
+              backgroundImage: "url(/lebron-poster-dunk.png)",
               display: {
                 sm: "none",
                 md: "flex",
@@ -125,25 +119,25 @@ export default function Home() {
               overflow="auto"
               maxHeight="100%"
             >
-              {messages.map((message, index) => (
+              {messages.map((msg, index) => (
                 <Box
                   key={index}
                   display="flex"
                   justifyContent={
-                    message.role === "assistant" ? "flex-start" : "flex-end"
+                    msg.role === "assistant" ? "flex-start" : "flex-end"
                   }
                 >
                   <Box
                     bgcolor={
-                      message.role === "assistant"
+                      msg.role === "assistant"
                         ? "primary.main"
                         : "secondary.main"
                     }
-                    color={message.role === "assistant" ? "white" : "black"}
+                    color={msg.role === "assistant" ? "white" : "black"}
                     borderRadius={16}
                     p={3}
                   >
-                    {message.content}
+                    {msg.content}
                   </Box>
                 </Box>
               ))}
