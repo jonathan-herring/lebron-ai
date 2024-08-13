@@ -85,8 +85,8 @@ export default function Home() {
   return (
     <ThemeProvider theme={LakersTheme}>
       <Box
-        width="100vw"
-        height="100vh"
+        width="calc(100vw - 16px)"
+        height="calc(100vh - 16px)"
         display="flex"
         flexDirection="column"
         justifyContent="center"
@@ -102,6 +102,10 @@ export default function Home() {
               backgroundSize: "400px",
               backgroundRepeat: "no-repeat",
               backgroundImage: "url(lebron-poster-dunk.png)",
+              display: {
+                sm: "none",
+                md: "flex",
+              },
             }}
             display="flex"
             justifyContent="center"
@@ -166,19 +170,6 @@ export default function Home() {
               </Button>
             </Stack>
           </Stack>
-
-          {/* Image on the right */}
-          <Box
-            component="img"
-            sx={{
-              height: 633,
-              width: 400,
-              borderRadius: "50%",
-              marginLeft: 2,
-            }}
-            alt="Right Avatar"
-            src="https://your-image-url.com/right-avatar.jpg"
-          />
         </Box>
       </Box>
     </ThemeProvider>
