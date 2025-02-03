@@ -1,4 +1,4 @@
-# LeBron AI
+## LeBron AI
 
 * LeBron AI isn’t just an ordinary chatbot—it embodies the mindset, wisdom, and versatility of LeBron James himself. Whether you need basketball tips, math help, life advice, or even dating guidance, LeBron AI delivers with the confidence, leadership, and strategic thinking that define one of the greatest players of all time.
 
