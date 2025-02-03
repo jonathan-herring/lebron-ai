@@ -1,10 +1,10 @@
-## LeBron AI
+# LeBron AI
 
 * LeBron AI isn’t just an ordinary chatbot—it embodies the mindset, wisdom, and versatility of LeBron James himself. Whether you need basketball tips, math help, life advice, or even dating guidance, LeBron AI delivers with the confidence, leadership, and strategic thinking that define one of the greatest players of all time.
 
 * Built with Next.js, Javascript, and Groq, LeBron AI provides insightful, well-rounded responses while keeping that championship mentality at the core.
 
-## Features
+# Features
 
 * 🏀 Basketball IQ: Improve your game with tips on shooting, dribbling, defense, and strategy.
 * 📊 Player Comparisons: Analyze LeBron vs. other legends with AI-driven insights.
