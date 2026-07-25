@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-07-25T16:01:13.603Z",
+  "source": "evals/original-training-examples.jsonl",
+  "total": 19,
+  "train": 15,
+  "validation": 4,
+  "checks": {
+    "validConversationShape": true,
+    "nonEmptyMessages": true,
+    "uniqueUserInputs": true,
+    "noLinksHandlesRetweetsOrHashtags": true,
+    "noTrailingEngagementQuestions": true
+  }
+}
