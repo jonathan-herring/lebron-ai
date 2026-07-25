@@ -19,3 +19,28 @@ Frontend: Next.js, Typescript
 AI Model: Groq
 LeBron AI brings greatness, intelligence, and versatility—just like the man himself. Whether you're working on your game, your grades, or your life, it’s built to help you strive for greatness every step of the way.
 
+## Persona Quality
+
+The live chatbot uses a context-dependent persona prompt rather than applying
+tweet-style language to every answer. Casual, serious, advice, and factual
+questions use different registers. A response-quality gate automatically
+revises common failures such as breaking character, claiming generic personal
+experiences, or repeating excessive emoji.
+
+Run the behavioral evaluation suite against a local server:
+
+```bash
+npm run eval:persona
+```
+
+Prepare the original, conversation-oriented examples for a future supported
+fine-tuning provider:
+
+```bash
+npm run prepare:finetune
+```
+
+This validates conversation shape, rejects duplicates and social-media
+contamination, and creates deterministic `train.jsonl` and `validation.jsonl`
+files under `evals/finetune`. Preparing these files does not submit a
+fine-tuning job.

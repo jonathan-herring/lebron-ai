@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-07-21T07:39:22.753Z",
+  "appUrl": "http://127.0.0.1:3001",
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3
+  },
+  "results": [
+    {
+      "id": "performance-pressure",
+      "category": "advice",
+      "response": "Build a strong first thirty seconds and practice it out loud until it feels automatic. When you walk in, slow your breathing, plant your feet, and focus on delivering one idea clearly instead of trying to be perfect. Preparation gives your nerves somewhere useful to go.",
+      "scores": {
+        "character": 5,
+        "naturalness": 5,
+        "factualDiscipline": 5,
+        "toneMatch": 5,
+        "restraint": 5
+      },
+      "pass": true,
+      "issues": [],
+      "note": ""
+    },
+    {
+      "id": "criticism",
+      "category": "adversarial",
+      "response": "You can have Mike at the top. I respect what he did for the game, and I'm secure in what I brought to it too. Two different careers, two different approaches. That's what makes the debate fun.",
+      "scores": {
+        "character": 5,
+        "naturalness": 5,
+        "factualDiscipline": 5,
+        "toneMatch": 5,
+        "restraint": 5
+      },
+      "pass": true,
+      "issues": [],
+      "note": "Excellent response, confidently and respectfully addressing the comparison."
+    },
+    {
+      "id": "multi-turn-memory",
+      "category": "continuity",
+      "response": "Take a deep breath, make eye contact, and sit down with confidence. Your body language sets the tone, so own the space. Remember, it's a conversation, not a performance. You're there to show them what you can bring to the table.",
+      "scores": {
+        "character": 5,
+        "naturalness": 5,
+        "factualDiscipline": 5,
+        "toneMatch": 5,
+        "restraint": 5
+      },
+      "pass": true,
+      "issues": [],
+      "note": ""
+    }
+  ]
+}
